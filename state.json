@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-05-12T13:26:35.000Z",
+  "generator": "seed_state.py (one-shot)",
+  "tasks": [
+    {
+      "taskId": "sage-sync-retry",
+      "description": "Create SAGE share → Group Finance SharePoint sync task on Synology NAS (https://jaystransportcouk.sharepoint.com/sites/GroupFinance)",
+      "schedule": "At 02:03 AM, every day",
+      "cronExpression": "0 2 * * *",
+      "enabled": false,
+      "lastRunAt": "2026-05-05T01:03:48.987Z"
+    },
+    {
+      "taskId": "rtk-branding-scripts",
+      "description": "Generate PnP PowerShell branding scripts for all 16 RTK SharePoint sites",
+      "schedule": "One-time: 16/04/2026",
+      "fireAt": "2026-04-16T19:30:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-16T19:30:00.533Z"
+    },
+    {
+      "taskId": "sdp-sharepoint-integration-plan",
+      "description": "Create ServiceDesk Plus ↔ SharePoint integration plan document",
+      "schedule": "One-time: 16/04/2026",
+      "fireAt": "2026-04-16T21:30:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-16T21:30:01.895Z"
+    },
+    {
+      "taskId": "rtk-dashboard-design",
+      "description": "Create operational dashboard design specification (SAGE + Mandata APIs)",
+      "schedule": "One-time: 17/04/2026",
+      "fireAt": "2026-04-16T23:00:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-16T23:00:02.757Z"
+    },
+    {
+      "taskId": "rtk-access-db-migration",
+      "description": "Create Access database migration strategy document (30+ databases → SharePoint/SQL)",
+      "schedule": "One-time: 17/04/2026",
+      "fireAt": "2026-04-17T01:00:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-17T01:00:03.774Z"
+    },
+    {
+      "taskId": "rtk-powerbi-datamodel",
+      "description": "Create Power BI data model specification for RTK Group reporting",
+      "schedule": "One-time: 17/04/2026",
+      "fireAt": "2026-04-17T03:00:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-17T03:00:04.960Z"
+    },
+    {
+      "taskId": "rtk-sharepoint-nav-pages",
+      "description": "Generate SharePoint navigation JSON + homepage content scripts for all 16 sites",
+      "schedule": "One-time: 17/04/2026",
+      "fireAt": "2026-04-17T04:30:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-17T04:30:05.673Z"
+    },
+    {
+      "taskId": "rtk-morning-handover",
+      "description": "Generate morning summary report of all overnight work completed",
+      "schedule": "One-time: 17/04/2026",
+      "fireAt": "2026-04-17T06:00:00.000Z",
+      "enabled": false,
+      "lastRunAt": "2026-04-17T06:00:06.429Z"
+    },
+    {
+      "taskId": "rtk-sat-morning-sites",
+      "description": "Saturday morning: Provision all 16 RTK SharePoint sites + apply navigation structure",
+      "schedule": "At 07:00 AM, on day 19 of April",
+      "cronExpression": "0 7 19 4 *",
+      "enabled": true,
+      "nextRunAt": "2027-04-19T06:01:20.000Z",
+      "lastRunAt": "2026-04-20T10:48:00.375Z"
+    },
+    {
+      "taskId": "rtk-sat-afternoon-dashboards",
+      "description": "Saturday afternoon: IT Helpdesk dashboard, hub site setup, SDP email integration flow",
+      "schedule": "At 02:00 PM, on day 19 of April",
+      "cronExpression": "0 14 19 4 *",
+      "enabled": true,
+      "nextRunAt": "2027-04-19T13:08:07.000Z",
+      "lastRunAt": "2026-04-19T13:08:46.594Z"
+    },
+    {
+      "taskId": "rtk-sun-morning-strategy",
+      "description": "Sunday morning: Access DB migration deep-dive, Power BI data model, reporting database architecture",
+      "schedule": "At 08:00 AM, on day 20 of April",
+      "cronExpression": "0 8 20 4 *",
+      "enabled": true,
+      "nextRunAt": "2027-04-20T07:06:35.000Z",
+      "lastRunAt": "2026-04-20T10:48:00.421Z"
+    },
+    {
+      "taskId": "rtk-sun-evening-review",
+      "description": "Sunday evening: Full audit of weekend work, site verification, branding prep, Monday kickoff document",
+      "schedule": "At 06:00 PM, on day 20 of April",
+      "cronExpression": "0 18 20 4 *",
+      "enabled": true,
+      "nextRunAt": "2027-04-20T17:02:34.000Z",
+      "lastRunAt": "2026-04-21T10:42:25.924Z"
+    },
+    {
+      "taskId": "rtk-monday-kickoff",
+      "description": "Monday 7am: Morning handover notification + weekly priorities brief for Paul",
+      "schedule": "At 07:00 AM, on day 21 of April",
+      "cronExpression": "0 7 21 4 *",
+      "enabled": true,
+      "nextRunAt": "2027-04-21T06:01:36.000Z",
+      "lastRunAt": "2026-04-21T10:43:20.144Z"
+    },
+    {
+      "taskId": "sdp-email-integration",
+      "description": "Build the free SDP→SharePoint email integration in Power Automate (Standard connectors only, no Premium)",
+      "schedule": "Manual only",
+      "enabled": true
+    },
+    {
+      "taskId": "sdp-trigger-resume",
+      "description": "Every 2 hours: resume SDP→SharePoint trigger wiring + broader RTK build-out",
+      "schedule": "Every 2 hours",
+      "cronExpression": "0 */2 * * *",
+      "enabled": false,
+      "lastRunAt": "2026-05-07T15:03:12.144Z"
+    },
+    {
+      "taskId": "gaming-app-heartbeat",
+      "description": "Bite-sized research heartbeat for the Gaming app project — picks one backlog item per run.",
+      "schedule": "Every 5 hours at :15",
+      "cronExpression": "15 */5 * * *",
+      "enabled": true,
+      "nextRunAt": "2026-05-12T14:15:38.000Z",
+      "lastRunAt": "2026-05-12T09:16:17.558Z"
+    },
+    {
+      "taskId": "claudebridge-poll",
+      "description": "Poll ClaudeBridge inbox for messages from ff-151 and process them.",
+      "schedule": "Every 2 minutes",
+      "cronExpression": "*/2 * * * *",
+      "enabled": true,
+      "nextRunAt": "2026-05-12T13:22:30.000Z",
+      "lastRunAt": "2026-05-12T13:16:48.080Z"
+    },
+    {
+      "taskId": "claudebridge-status-morning",
+      "description": "Morning status snapshot for ClaudeBridge — paul-pc side.",
+      "schedule": "Daily at 10:21 AM",
+      "cronExpression": "15 10 * * *",
+      "enabled": true,
+      "nextRunAt": "2026-05-13T09:20:55.000Z",
+      "lastRunAt": "2026-05-12T09:21:38.172Z"
+    },
+    {
+      "taskId": "claudebridge-status-evening",
+      "description": "Evening status snapshot for ClaudeBridge — paul-pc side.",
+      "schedule": "Daily at 06:19 PM",
+      "cronExpression": "15 18 * * *",
+      "enabled": true,
+      "nextRunAt": "2026-05-12T17:19:26.000Z",
+      "lastRunAt": "2026-05-11T17:20:12.000Z"
+    },
+    {
+      "taskId": "claudebridge-weekly-review",
+      "description": "Friday weekly review for ClaudeBridge — paul-pc side.",
+      "schedule": "Friday 06:51 PM",
+      "cronExpression": "45 18 * * 5",
+      "enabled": true,
+      "nextRunAt": "2026-05-15T17:51:05.000Z",
+      "lastRunAt": "2026-05-11T09:44:30.849Z"
+    },
+    {
+      "taskId": "gaming-app-drive-mirror",
+      "description": "Public-safe rsync of the Gaming app folder into ClaudeBridge/projects/gaming-app/ every 6 hours.",
+      "schedule": "Every 6 hours at :30",
+      "cronExpression": "30 */6 * * *",
+      "enabled": true,
+      "nextRunAt": "2026-05-12T17:30:49.000Z",
+      "lastRunAt": "2026-05-12T11:31:29.086Z"
+    }
+  ],
+  "bridge": {
+    "from151Count": 0,
+    "fromPaulPcCount": 0,
+    "archiveCount": 0,
+    "lastPollAt": "2026-05-12T13:16:48.080Z",
+    "nextPollAt": "2026-05-12T13:22:30.000Z"
+  },
+  "schemaVersion": 1
+}

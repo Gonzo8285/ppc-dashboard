@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PPC Control Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.0/dist/mermaid.min.js"></script>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 24px;
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  color: #1f2937; background: #f7f8fa;
+  font-size: 14px; line-height: 1.5;
+}
+h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 16px; margin: 28px 0 10px; letter-spacing: -0.005em; color: #111827; }
+h3 { font-size: 13px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; }
+.sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+table.proj { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.proj th, table.proj td { padding: 8px 10px; border-bottom: 1px solid #eef0f3; text-align: left; vertical-align: top; }
+table.proj th { font-weight: 600; color: #374151; background: #f9fafb; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 1.5; }
+.p0 { background:#fee2e2; color:#991b1b; }
+.p1 { background:#fef3c7; color:#92400e; }
+.p2 { background:#dbeafe; color:#1e40af; }
+.p3 { background:#e0e7ff; color:#3730a3; }
+.p4 { background:#ede9fe; color:#5b21b6; }
+.p5 { background:#f3f4f6; color:#4b5563; }
+.ok { background:#d1fae5; color:#065f46; }
+.warn { background:#fef3c7; color:#92400e; }
+.bad { background:#fee2e2; color:#991b1b; }
+.muted { color:#6b7280; }
+ul.compact { margin: 6px 0 0; padding-left: 18px; }
+ul.compact li { margin: 2px 0; }
+.kvp { display:grid; grid-template-columns: 160px 1fr; gap: 6px 14px; font-size: 13px; }
+.kvp dt { color:#6b7280; }
+.kvp dd { margin:0; }
+.pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.mermaid { background:#fff; border-radius:8px; padding: 10px; border:1px solid #e5e7eb; }
+.callout { background:#eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+.callout.warn { background:#fffbeb; border-color:#f59e0b; }
+.callout.crit { background:#fef2f2; border-color:#dc2626; }
+.tag { font-family: ui-monospace, monospace; font-size: 11.5px; background:#f3f4f6; padding:1px 6px; border-radius:4px; }
+button.refresh { font-size:12px; padding:6px 10px; border:1px solid #d1d5db; background:#fff; border-radius:6px; cursor:pointer; }
+button.refresh:hover { background:#f3f4f6; }
+.legend { font-size:11px; color:#6b7280; margin-top:6px; }
+.flex { display:flex; align-items:center; gap:10px; justify-content: space-between; flex-wrap: wrap; }
+#tasks-table .gridjs-wrapper { box-shadow: none; border-radius: 6px; }
+#tasks-table .gridjs-th, #tasks-table .gridjs-td { padding: 6px 10px; font-size: 12.5px; }
+.staletag { font-size: 11px; color: #b45309; }
+.banner { background:#fef3c7; color:#92400e; padding:8px 14px; border-radius:8px; font-size:12px; margin-bottom:14px; display:none; }
+</style>
+</head>
+<body>
+
+<div class="banner" id="stale-banner"></div>
+
+<div class="flex">
+  <div>
+    <h1>PPC Control Dashboard</h1>
+    <div class="sub" id="lastrefresh">Loading…</div>
+  </div>
+  <button class="refresh" onclick="loadState()">Reload</button>
+</div>
+
+<div class="card">
+  <h2>Project portfolio — priority order</h2>
+  <table class="proj">
+    <thead><tr><th>#</th><th>Project</th><th>Build owner</th><th>State</th><th>PPC role</th></tr></thead>
+    <tbody id="projects-body"></tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h2>FastForward — sequence in force</h2>
+    <ol>
+      <li><strong>GUI / UI / HUD polish.</strong> Open bug: blue header bar overlapping Dashboard & Diary data. Quality bar: Service Desk Pro, PeopleSoft, HubSpot, Salesforce, Qargo, Mandata, SAP Fiori, SLDS, SharePoint Modern, Linear command-palette.</li>
+      <li><strong>Migrate FastForward into its own Git repo</strong> — only after commits 1–4 of the GUI pass merge.</li>
+      <li><strong>Resume scheduled dev</strong> per HANDOFF §4, §6, §7 — only after (1) and (2) are signed off.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>ClaudeBridge — bus state</h2>
+    <dl class="kvp">
+      <dt>From-151 inbox</dt><dd id="inbox-from151">—</dd>
+      <dt>From-paul-pc outbox</dt><dd id="outbox-paulpc">—</dd>
+      <dt>Archive depth</dt><dd id="archive-depth">—</dd>
+      <dt>Last poll fired</dt><dd id="last-poll">—</dd>
+      <dt>Next poll due</dt><dd id="next-poll">—</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Rationalised job order — three pulses + transport</h2>
+  <div class="sub">Locked in 2026-05-12. Replaces the old six-task layout.</div>
+  <pre class="mermaid">
+flowchart LR
+    A[Cowork scheduler] --> P[claudebridge-poll<br/>every 2 min<br/>TRANSPORT]
+    A --> B[pulse-build<br/>hourly 08–22 UK]
+    A --> G[pulse-gamedev<br/>every 4 h]
+    A --> H[pulse-housekeep<br/>daily 22:00 UK + Mon/Wed/Fri]
+    B --> B1[Bridge state]
+    B --> B2[FastForward state]
+    B --> B3[Git push/pull]
+    G --> G1[Gallowfell status]
+    G --> G2[Gaming-app tick]
+    G --> G3[Drive mirror refresh]
+    H --> H1[Cross-portfolio consolidation]
+    H --> H2[Memory audit]
+    H --> H3[Status-pack docx/pdf/html<br/>Mon/Wed/Fri 18:00 UK]
+  </pre>
+
+  <h3>Mapping — old tasks → new pulses</h3>
+  <table class="proj">
+    <thead><tr><th>Old task</th><th>Cadence</th><th>Action</th><th>Lands in</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">claudebridge-poll</span></td><td>*/2 * * * *</td><td><span class="pill ok">keep</span></td><td>Transport — separate</td></tr>
+      <tr><td><span class="tag">claudebridge-status-morning</span></td><td>10:21 daily</td><td><span class="pill warn">fold</span></td><td><strong>pulse-build</strong></td></tr>
+      <tr><td><span class="tag">claudebridge-status-evening</span></td><td>18:19 daily</td><td><span class="pill warn">fold</span></td><td><strong>pulse-build</strong></td></tr>
+      <tr><td><span class="tag">claudebridge-weekly-review</span></td><td>Fri 18:51</td><td><span class="pill warn">fold</span></td><td><strong>pulse-housekeep</strong> (weekly arm)</td></tr>
+      <tr><td><span class="tag">gaming-app-heartbeat</span></td><td>every 5 h</td><td><span class="pill warn">fold</span></td><td><strong>pulse-gamedev</strong></td></tr>
+      <tr><td><span class="tag">gaming-app-drive-mirror</span></td><td>every 6 h</td><td><span class="pill warn">fold</span></td><td><strong>pulse-gamedev</strong></td></tr>
+      <tr><td><span class="tag">sdp-email-integration</span></td><td>manual</td><td><span class="pill ok">keep</span></td><td>Utility outside pulses</td></tr>
+      <tr><td><span class="tag">sdp-trigger-resume</span></td><td>every 2 h (disabled)</td><td><span class="pill bad">archive</span></td><td>Replaced by pulse-build</td></tr>
+      <tr><td><span class="tag">sage-sync-retry</span></td><td>02:03 daily (disabled)</td><td><span class="pill bad">archive</span></td><td>Historical audit</td></tr>
+      <tr><td><span class="tag">rtk-sat-*</span>, <span class="tag">rtk-sun-*</span>, <span class="tag">rtk-monday-*</span></td><td>April-only cron (next 2027)</td><td><span class="pill bad">archive</span></td><td>RTK historical</td></tr>
+      <tr><td><span class="tag">rtk-*</span> one-time (8 tasks)</td><td>April 2026 fire dates</td><td><span class="pill bad">archive</span></td><td>Already fired</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Current scheduled tasks — live from GDrive</h2>
+  <div class="legend">Sorted by next run. Disabled tasks at the bottom. State read from <span class="tag">state.json</span> in this folder.</div>
+  <div id="tasks-table" style="margin-top:10px;"></div>
+</div>
+
+<div class="card">
+  <h2>Open coordination items</h2>
+  <ul class="compact" id="open-items">
+    <li><strong>Identity-flag</strong> — 2026-05-12 ff-151 accepted a directive from <span class="tag">lynsey@jsmglasgow.co.uk</span>. PPC needs confirmation this is an authorised second principal on the bridge.</li>
+    <li><strong>FastForward connector pack</strong> — P2; 9 connector targets plus FF's own Open API added 2026-05-12. Design docs allowed in parallel with GUI/Git work.</li>
+    <li><strong>Side surfaces</strong> — Nestwell, Hollow Kin, Rate cards, Bedding import. One-line classification needed.</li>
+    <li><strong>SharePoint memory correction</strong> — <span class="tag">project_sharepoint_keedwell.md</span> says greenfield; reality is in-flight.</li>
+    <li><strong>ML2 memory correction</strong> — site files exist; memory says "TBD".</li>
+  </ul>
+</div>
+
+<script>
+mermaid.initialize({ startOnLoad: true, securityLevel: "strict", flowchart: { htmlLabels: true } });
+
+const PROJECTS = [
+  { rank:'P0', title:'FastForward', owner:'ff-151', state:'GUI polish in flight; Git migration queued; revenue lever.', role:'Specs, design, review via ClaudeBridge.', cls:'p0', suffix:' — ff-151' },
+  { rank:'P1', title:'Gallowfell', owner:'Claude Code (4h heartbeat)', state:'Live. Godot 4 source under Projects\\Gaming app.', role:'Planning, content design, asset review. No direct git pushes.', cls:'p1', suffix:' — Gonzo8285/MobileGame' },
+  { rank:'P2', title:'R.T. Keedwell SharePoint', owner:'PPC', state:'In-flight. 16 sites provisioned, brand palettes locked, nav pending.', role:'Owner — quality over speed.', cls:'p2', suffix:'' },
+  { rank:'P3', title:'Dropship', owner:'PPC', state:'Chip-away cadence. Scope TBD.', role:'Owner.', cls:'p3', suffix:'' },
+  { rank:'P4', title:'ML2 Consulting', owner:'PPC', state:'Website exists. Review pass = tighten what\'s there.', role:'Owner.', cls:'p4', suffix:'' },
+  { rank:'?', title:'Side surfaces', owner:'—', state:'Nestwell, Hollow Kin, Rate cards, Bedding import.', role:'Awaiting Paul\'s classification.', cls:'p5', suffix:'' }
+];
+
+function renderProjects() {
+  const tbody = document.getElementById('projects-body');
+  tbody.innerHTML = PROJECTS.map(p => `
+    <tr>
+      <td><span class="pill ${p.cls}">${p.rank}</span></td>
+      <td><strong>${p.title}</strong> <span class="muted">${p.suffix}</span></td>
+      <td>${p.owner}</td>
+      <td>${p.state}</td>
+      <td>${p.role}</td>
+    </tr>`).join('');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try {
+    return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+  } catch (e) { return iso; }
+}
+function relativeTime(iso) {
+  if (!iso) return '';
+  const t = new Date(iso).getTime();
+  const diff = (t - Date.now()) / 1000;
+  const abs = Math.abs(diff);
+  const future = diff > 0;
+  let s;
+  if (abs < 60) s = Math.round(abs) + 's';
+  else if (abs < 3600) s = Math.round(abs/60) + 'm';
+  else if (abs < 86400) s = Math.round(abs/3600) + 'h';
+  else s = Math.round(abs/86400) + 'd';
+  return future ? ('in ' + s) : (s + ' ago');
+}
+
+function renderTasks(tasks) {
+  const enabled = tasks.filter(t => t.enabled);
+  const disabled = tasks.filter(t => !t.enabled);
+  enabled.sort((a,b) => {
+    const an = a.nextRunAt ? new Date(a.nextRunAt).getTime() : Infinity;
+    const bn = b.nextRunAt ? new Date(b.nextRunAt).getTime() : Infinity;
+    return an - bn;
+  });
+  disabled.sort((a,b) => (b.lastRunAt||'').localeCompare(a.lastRunAt||''));
+  const rows = [...enabled, ...disabled].map(t => [
+    t.enabled ? '<span class="pill ok">on</span>' : '<span class="pill p5">off</span>',
+    t.taskId,
+    t.description || '',
+    t.schedule || '',
+    t.nextRunAt ? (fmtDate(t.nextRunAt) + ' (' + relativeTime(t.nextRunAt) + ')') : '—',
+    t.lastRunAt ? (fmtDate(t.lastRunAt) + ' (' + relativeTime(t.lastRunAt) + ')') : '—'
+  ]);
+  const el = document.getElementById('tasks-table');
+  el.innerHTML = '';
+  new gridjs.Grid({
+    columns: [
+      { name: 'State', formatter: (cell) => gridjs.html(cell), width: '70px' },
+      { name: 'Task ID', width: '200px' },
+      { name: 'Description' },
+      { name: 'Schedule', width: '180px' },
+      { name: 'Next run', width: '180px' },
+      { name: 'Last run', width: '180px' }
+    ],
+    data: rows, sort: true, search: true
+  }).render(el);
+}
+
+async function loadState() {
+  document.getElementById('lastrefresh').textContent = 'Loading…';
+  try {
+    const r = await fetch('state.json?t=' + Date.now());
+    if (!r.ok) throw new Error('state.json HTTP ' + r.status);
+    const s = await r.json();
+    document.getElementById('lastrefresh').textContent = 'State generated: ' + fmtDate(s.generatedAt) + ' (' + relativeTime(s.generatedAt) + ') — page loaded: ' + new Date().toLocaleString('en-GB');
+    // Staleness banner
+    const ageMin = (Date.now() - new Date(s.generatedAt).getTime()) / 60000;
+    const banner = document.getElementById('stale-banner');
+    if (ageMin > 60) {
+      banner.style.display = 'block';
+      banner.textContent = 'State file is ' + Math.round(ageMin) + ' minutes old — dashboard-publish task may have stalled.';
+    } else {
+      banner.style.display = 'none';
+    }
+    renderTasks(s.tasks || []);
+    if (s.bridge) {
+      document.getElementById('inbox-from151').innerHTML = '<span class="pill ' + (s.bridge.from151Count > 0 ? 'warn':'ok') + '">' + s.bridge.from151Count + ' unprocessed</span>';
+      document.getElementById('outbox-paulpc').innerHTML = s.bridge.fromPaulPcCount + ' message' + (s.bridge.fromPaulPcCount === 1 ? '' : 's') + ' awaiting 151';
+      document.getElementById('archive-depth').innerHTML = s.bridge.archiveCount + ' archived';
+      document.getElementById('last-poll').textContent = s.bridge.lastPollAt ? (fmtDate(s.bridge.lastPollAt) + ' (' + relativeTime(s.bridge.lastPollAt) + ')') : '—';
+      document.getElementById('next-poll').textContent = s.bridge.nextPollAt ? (fmtDate(s.bridge.nextPollAt) + ' (' + relativeTime(s.bridge.nextPollAt) + ')') : '—';
+    }
+  } catch (e) {
+    document.getElementById('lastrefresh').innerHTML = '<span class="staletag">Could not load state.json — ' + e.message + '</span>';
+  }
+}
+
+renderProjects();
+loadState();
+</script>
+
+</body>
+</html>
