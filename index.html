@@ -2,267 +2,195 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>PPC Control Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PPC Control Dashboard — Controller (Paul)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css">
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.0/dist/mermaid.min.js"></script>
 <style>
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
-body {
-  margin: 0; padding: 24px;
-  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-  color: #1f2937; background: #f7f8fa;
-  font-size: 14px; line-height: 1.5;
-}
+body { margin: 0; padding: 18px; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; color: #1f2937; background: #f7f8fa; font-size: 14px; line-height: 1.5; }
 h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
-h2 { font-size: 16px; margin: 28px 0 10px; letter-spacing: -0.005em; color: #111827; }
-h3 { font-size: 13px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; }
-.sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
-.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+h2 { font-size: 16px; margin: 22px 0 8px; letter-spacing: -0.005em; color: #111827; }
+h3 { font-size: 12px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; }
+.sub { color: #6b7280; font-size: 12px; margin-bottom: 14px; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
 table.proj { width: 100%; border-collapse: collapse; font-size: 13px; }
-table.proj th, table.proj td { padding: 8px 10px; border-bottom: 1px solid #eef0f3; text-align: left; vertical-align: top; }
-table.proj th { font-weight: 600; color: #374151; background: #f9fafb; }
-.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 1.5; }
+table.proj th, table.proj td { padding: 7px 8px; border-bottom: 1px solid #eef0f3; text-align: left; vertical-align: top; }
+table.proj th { font-weight: 600; color: #374151; background: #f9fafb; font-size: 12px; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 1.5; white-space: nowrap; }
 .p0 { background:#fee2e2; color:#991b1b; }
 .p1 { background:#fef3c7; color:#92400e; }
 .p2 { background:#dbeafe; color:#1e40af; }
 .p3 { background:#e0e7ff; color:#3730a3; }
-.p4 { background:#ede9fe; color:#5b21b6; }
-.p5 { background:#f3f4f6; color:#4b5563; }
 .ok { background:#d1fae5; color:#065f46; }
 .warn { background:#fef3c7; color:#92400e; }
 .bad { background:#fee2e2; color:#991b1b; }
 .muted { color:#6b7280; }
-ul.compact { margin: 6px 0 0; padding-left: 18px; }
+ul.compact { margin: 4px 0 0; padding-left: 18px; }
 ul.compact li { margin: 2px 0; }
 .kvp { display:grid; grid-template-columns: 160px 1fr; gap: 6px 14px; font-size: 13px; }
 .kvp dt { color:#6b7280; }
 .kvp dd { margin:0; }
-.pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
-.mermaid { background:#fff; border-radius:8px; padding: 10px; border:1px solid #e5e7eb; }
-.callout { background:#eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+.pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; word-break: break-all; }
+.callout { background:#eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 4px; margin: 8px 0; font-size: 13px; }
 .callout.warn { background:#fffbeb; border-color:#f59e0b; }
 .callout.crit { background:#fef2f2; border-color:#dc2626; }
-.tag { font-family: ui-monospace, monospace; font-size: 11.5px; background:#f3f4f6; padding:1px 6px; border-radius:4px; }
-button.refresh { font-size:12px; padding:6px 10px; border:1px solid #d1d5db; background:#fff; border-radius:6px; cursor:pointer; }
-button.refresh:hover { background:#f3f4f6; }
+.tag { font-family: ui-monospace, monospace; font-size: 11px; background:#f3f4f6; padding:1px 6px; border-radius:4px; }
 .legend { font-size:11px; color:#6b7280; margin-top:6px; }
 .flex { display:flex; align-items:center; gap:10px; justify-content: space-between; flex-wrap: wrap; }
-#tasks-table .gridjs-wrapper { box-shadow: none; border-radius: 6px; }
-#tasks-table .gridjs-th, #tasks-table .gridjs-td { padding: 6px 10px; font-size: 12.5px; }
 .staletag { font-size: 11px; color: #b45309; }
-.banner { background:#fef3c7; color:#92400e; padding:8px 14px; border-radius:8px; font-size:12px; margin-bottom:14px; display:none; }
+.banner-crit { background:#fee2e2; color:#991b1b; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; border-left: 4px solid #dc2626; font-weight: 600; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.kbd { font-family: ui-monospace, monospace; background:#f3f4f6; border:1px solid #e5e7eb; padding:0 5px; border-radius:3px; font-size:11.5px; }
+.urlcell { font-family: ui-monospace, monospace; font-size: 12px; }
 </style>
 </head>
 <body>
 
-<div class="banner" id="stale-banner"></div>
+<h1>PPC Control Dashboard</h1>
+<div class="sub">Controller (Paul, ML2 Consulting → JSM). Cross-portfolio status. Refresh on every state change at 4h cadence anchors.</div>
 
-<div class="flex">
-  <div>
-    <h1>PPC Control Dashboard</h1>
-    <div class="sub" id="lastrefresh">Loading…</div>
-  </div>
-  <button class="refresh" onclick="loadState()">Reload</button>
+<div class="banner-crit">
+  P0 OUTAGE — FastForward live URL <span class="pre">https://fastforward-v1-2-0-demo.surge.sh/</span> returning <strong>503 Service Unavailable</strong> since ~19:30Z 2026-05-15. GH Pages emergency migration shipped to .151 at 19:36Z. Hard ETA for recovery: 22:00Z.
 </div>
 
 <div class="card">
-  <h2>Project portfolio — priority order</h2>
-  <table class="proj">
-    <thead><tr><th>#</th><th>Project</th><th>Build owner</th><th>State</th><th>PPC role</th></tr></thead>
-    <tbody id="projects-body"></tbody>
-  </table>
-</div>
-
-<div class="row">
-  <div class="card">
-    <h2>FastForward — sequence in force</h2>
-    <ol>
-      <li><strong>GUI / UI / HUD polish.</strong> Open bug: blue header bar overlapping Dashboard & Diary data. Quality bar: Service Desk Pro, PeopleSoft, HubSpot, Salesforce, Qargo, Mandata, SAP Fiori, SLDS, SharePoint Modern, Linear command-palette.</li>
-      <li><strong>Migrate FastForward into its own Git repo</strong> — only after commits 1–4 of the GUI pass merge.</li>
-      <li><strong>Resume scheduled dev</strong> per HANDOFF §4, §6, §7 — only after (1) and (2) are signed off.</li>
-    </ol>
+  <div class="flex">
+    <h2 style="margin:0">Live URLs</h2>
+    <span id="lastrefresh" class="staletag">Dashboard generated 2026-05-15 19:42Z by Controller</span>
   </div>
-
-  <div class="card">
-    <h2>ClaudeBridge — bus state</h2>
-    <dl class="kvp">
-      <dt>From-151 inbox</dt><dd id="inbox-from151">—</dd>
-      <dt>From-paul-pc outbox</dt><dd id="outbox-paulpc">—</dd>
-      <dt>Archive depth</dt><dd id="archive-depth">—</dd>
-      <dt>Last poll fired</dt><dd id="last-poll">—</dd>
-      <dt>Next poll due</dt><dd id="next-poll">—</dd>
-    </dl>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Rationalised job order — three pulses + transport</h2>
-  <div class="sub">Locked in 2026-05-12. Replaces the old six-task layout.</div>
-  <pre class="mermaid">
-flowchart LR
-    A[Cowork scheduler] --> P[claudebridge-poll<br/>every 2 min<br/>TRANSPORT]
-    A --> B[pulse-build<br/>hourly 08–22 UK]
-    A --> G[pulse-gamedev<br/>every 4 h]
-    A --> H[pulse-housekeep<br/>daily 22:00 UK + Mon/Wed/Fri]
-    B --> B1[Bridge state]
-    B --> B2[FastForward state]
-    B --> B3[Git push/pull]
-    G --> G1[Gallowfell status]
-    G --> G2[Gaming-app tick]
-    G --> G3[Drive mirror refresh]
-    H --> H1[Cross-portfolio consolidation]
-    H --> H2[Memory audit]
-    H --> H3[Status-pack docx/pdf/html<br/>Mon/Wed/Fri 18:00 UK]
-  </pre>
-
-  <h3>Mapping — old tasks → new pulses</h3>
   <table class="proj">
-    <thead><tr><th>Old task</th><th>Cadence</th><th>Action</th><th>Lands in</th></tr></thead>
+    <thead><tr><th>Surface</th><th>URL</th><th>Status</th><th>Notes</th></tr></thead>
     <tbody>
-      <tr><td><span class="tag">claudebridge-poll</span></td><td>*/2 * * * *</td><td><span class="pill ok">keep</span></td><td>Transport — separate</td></tr>
-      <tr><td><span class="tag">claudebridge-status-morning</span></td><td>10:21 daily</td><td><span class="pill warn">fold</span></td><td><strong>pulse-build</strong></td></tr>
-      <tr><td><span class="tag">claudebridge-status-evening</span></td><td>18:19 daily</td><td><span class="pill warn">fold</span></td><td><strong>pulse-build</strong></td></tr>
-      <tr><td><span class="tag">claudebridge-weekly-review</span></td><td>Fri 18:51</td><td><span class="pill warn">fold</span></td><td><strong>pulse-housekeep</strong> (weekly arm)</td></tr>
-      <tr><td><span class="tag">gaming-app-heartbeat</span></td><td>every 5 h</td><td><span class="pill warn">fold</span></td><td><strong>pulse-gamedev</strong></td></tr>
-      <tr><td><span class="tag">gaming-app-drive-mirror</span></td><td>every 6 h</td><td><span class="pill warn">fold</span></td><td><strong>pulse-gamedev</strong></td></tr>
-      <tr><td><span class="tag">sdp-email-integration</span></td><td>manual</td><td><span class="pill ok">keep</span></td><td>Utility outside pulses</td></tr>
-      <tr><td><span class="tag">sdp-trigger-resume</span></td><td>every 2 h (disabled)</td><td><span class="pill bad">archive</span></td><td>Replaced by pulse-build</td></tr>
-      <tr><td><span class="tag">sage-sync-retry</span></td><td>02:03 daily (disabled)</td><td><span class="pill bad">archive</span></td><td>Historical audit</td></tr>
-      <tr><td><span class="tag">rtk-sat-*</span>, <span class="tag">rtk-sun-*</span>, <span class="tag">rtk-monday-*</span></td><td>April-only cron (next 2027)</td><td><span class="pill bad">archive</span></td><td>RTK historical</td></tr>
-      <tr><td><span class="tag">rtk-*</span> one-time (8 tasks)</td><td>April 2026 fire dates</td><td><span class="pill bad">archive</span></td><td>Already fired</td></tr>
+      <tr><td><strong>FF — Surge (was live)</strong></td><td class="urlcell"><a href="https://fastforward-v1-2-0-demo.surge.sh/">fastforward-v1-2-0-demo.surge.sh</a></td><td><span class="pill bad">503</span></td><td>Down since ~19:30Z; project unreachable on Surge edge; retiring</td></tr>
+      <tr><td><strong>FF — GH Pages (target canonical)</strong></td><td class="urlcell"><a href="https://fastforwardtransportapp-dev.github.io/fastforward-transport-app/">fastforwardtransportapp-dev.github.io/fastforward-transport-app/</a></td><td><span class="pill warn">stale</span></td><td>Last build 14 May 12:33Z. Awaiting .151 git push of v1.8.0.</td></tr>
+      <tr><td>PPC Dashboard (this page)</td><td class="urlcell"><a href="https://gonzo8285.github.io/ppc-dashboard/">gonzo8285.github.io/ppc-dashboard</a></td><td><span class="pill ok">live</span></td><td>Controller-owned; refreshed this cycle</td></tr>
+      <tr><td>ClaudeBridge Dashboard</td><td class="urlcell"><a href="https://gonzo8285.github.io/claudebridge-dashboard/">gonzo8285.github.io/claudebridge-dashboard</a></td><td><span class="pill warn">refresh queued</span></td><td>Controller-owned; same cycle refresh in flight</td></tr>
+      <tr><td>Command Centre</td><td class="urlcell"><a href="https://gonzo8285.github.io/command-centre/">gonzo8285.github.io/command-centre</a></td><td><span class="pill warn">refresh queued</span></td><td>Controller-owned; same cycle refresh in flight</td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="card">
-  <h2>Current scheduled tasks — live from GDrive</h2>
-  <div class="legend">Sorted by next run. Disabled tasks at the bottom. State read from <span class="tag">state.json</span> in this folder.</div>
-  <div id="tasks-table" style="margin-top:10px;"></div>
+  <h2>FastForward — current state (v1.8.0 shipped 18:11Z)</h2>
+  <div class="sub">Shipped to Surge before Surge went 503. Live status = unreachable; build itself = v1.8.0 verified byte-exact at deploy time.</div>
+  <dl class="kvp">
+    <dt>Latest version</dt><dd><span class="tag">v1.8.0-auth-gate-customer-profile</span> at 18:11Z</dd>
+    <dt>Etag (at deploy)</dt><dd class="pre">c009a129d4068a477ea9ab076c3bad056ac5317ae7732d8aa1121f48cee19433</dd>
+    <dt>Today's release train</dt><dd>v1.2.0 → v1.3.0 → v1.4.0 → v1.5.0 → v1.5.1 → v1.6.0 → v1.7.0 → v1.8.0 (8 versions in one day)</dd>
+    <dt>Git status</dt><dd><span class="pill bad">UNRECONCILED</span> — GitHub main at <span class="tag">7352f80</span> from 14 May; none of today pushed; no tags; no dev branch; no protection</dd>
+    <dt>Build pipeline</dt><dd>In-browser Babel still. esbuild deferred to v1.9.0.</dd>
+    <dt>Auth bypass (P0)</dt><dd><span class="pill ok">FIXED in v1.8.0</span> via AppShell + onAuthStateChange</dd>
+    <dt>O365 redirect URI (P0)</dt><dd><span class="pill warn">FF-side fixed</span> (derived from window.location.origin); Azure-side blocked on Lynsey admin</dd>
+    <dt>Repo</dt><dd><a href="https://github.com/fastforwardtransportapp-dev/fastforward-transport-app">fastforwardtransportapp-dev/fastforward-transport-app</a> · public · main only · no tags</dd>
+  </dl>
 </div>
 
 <div class="card">
-  <h2>Open coordination items</h2>
-  <ul class="compact" id="open-items">
-    <li><strong>Identity-flag</strong> — 2026-05-12 ff-151 accepted a directive from <span class="tag">lynsey@jsmglasgow.co.uk</span>. PPC needs confirmation this is an authorised second principal on the bridge.</li>
-    <li><strong>FastForward connector pack</strong> — P2; 9 connector targets plus FF's own Open API added 2026-05-12. Design docs allowed in parallel with GUI/Git work.</li>
-    <li><strong>Side surfaces</strong> — Nestwell, Hollow Kin, Rate cards, Bedding import. One-line classification needed.</li>
-    <li><strong>SharePoint memory correction</strong> — <span class="tag">project_sharepoint_keedwell.md</span> says greenfield; reality is in-flight.</li>
-    <li><strong>ML2 memory correction</strong> — site files exist; memory says "TBD".</li>
+  <h2>Priority list (7 items, ordered, set 2026-05-15)</h2>
+  <table class="proj">
+    <thead><tr><th>#</th><th>Item</th><th>State</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Profile pages — customer + subcontractor</strong></td><td><span class="pill warn">in flight</span></td><td>Customer spine ironclad in v1.8.0. Document store / job history / job lists / multi-contact / previous invoices / email-direct still to land. Sub mirror with insurance expiry + reliability score deltas next.</td></tr>
+      <tr><td>2</td><td>Invoicing end-to-end</td><td><span class="pill p2">queued</span></td><td>Create → line items/VAT → PDF → send-via-email → mark-paid round-trip.</td></tr>
+      <tr><td>3</td><td>Doc creation + template references</td><td><span class="pill warn">partial</span></td><td>Document Designer drag-drop UI live. Default + Saved chooser pattern not yet wired across Invoice/POD/Job Sheet/Delivery Note.</td></tr>
+      <tr><td>4</td><td>Doc upload + attach to profile + outbound email</td><td><span class="pill p2">queued</span></td><td>Profile attachments slot ready; outbound-email attach pending Email Direct functions.</td></tr>
+      <tr><td>5</td><td>Admin panel + connectors</td><td><span class="pill warn">22 cards + 12 toggles shipped</span></td><td>v1.8.0 wired cards; wizards / test-connection / sync timestamps still to land. ADMIN-CONNECTORS-PLAN.md owed.</td></tr>
+      <tr><td>6</td><td>Sage research doc</td><td><span class="pill p2">queued</span></td><td>SAGE-INTEGRATION-RESEARCH.md across Sage 50/50cloud, Business Cloud, 200, Intacct, X3 + iPaaS aggregators.</td></tr>
+      <tr><td>7</td><td>Reporting (dropdown builder)</td><td><span class="pill warn">scaffolded</span></td><td>Revenue Summary KPI cards + result table present. Multi-source + grouping + saved configs to land.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h2>Active directives in bridge</h2>
+    <table class="proj">
+      <thead><tr><th>Ts</th><th>Subject</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td>12:25Z</td><td>git discipline + design approved + 7-item priority list</td><td><span class="pill ok">processed</span></td></tr>
+        <tr><td>16:40Z</td><td>v1.7.0 review + instruction list (auth bypass, O365 URL, build pipeline)</td><td><span class="pill ok">processed → v1.8.0 ships</span></td></tr>
+        <tr><td>19:10Z</td><td>Authority clarification + decision answers + profile scope + header bug</td><td><span class="pill warn">awaiting reply</span></td></tr>
+        <tr><td>19:35Z</td><td>ACK protocol — tick-box within 10 min before substantive work</td><td><span class="pill warn">awaiting first ACK use</span></td></tr>
+        <tr><td>19:36Z</td><td><strong>P0 OUTAGE — Surge 503; GH Pages emergency migration</strong></td><td><span class="pill bad">awaiting ACK</span></td></tr>
+        <tr><td>19:55Z</td><td>Git discipline — reconcile now (push today's 8 versions)</td><td><span class="pill warn">awaiting reply (folded into P0 path)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Standing rules in force</h2>
+    <ul class="compact">
+      <li><strong>Authority:</strong> Controller = Paul (ML2 Consulting → JSM). Lynsey = JSM director / user voice, not command. Precedence: Paul → standing memory → Lynsey PENDING → .151 judgement.</li>
+      <li><strong>Cadence:</strong> max 4h between contacts in either direction. Anchors 00/04/08/12/16/20 UK. Quiet cycles still write a one-line status. Memory commit every cycle.</li>
+      <li><strong>ACK protocol:</strong> every directive landing in <span class="tag">comms/from-paul-pc/</span> requires a tick-box ACK in <span class="tag">comms/from-151/</span> within 10 min, before substantive work.</li>
+      <li><strong>Git discipline gate:</strong> every FF change ships via Conventional Commits, per-feature branches, PR-merged. No in-place edits.</li>
+      <li><strong>Truth-source:</strong> live URL, not git state. Every "deployed" claim verified against the public URL.</li>
+      <li><strong>One URL truth:</strong> migrate to GH Pages as canonical single live URL. Retire Surge after cutover.</li>
+      <li><strong>AWS:</strong> deferred to product launch. Build APIs + connectors in parallel on free hobby tier.</li>
+      <li><strong>Static header above dynamic field:</strong> list-page headers as outer-layout siblings, sticky, never inside the scroll container.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h2>Cross-portfolio P-rank</h2>
+    <table class="proj">
+      <thead><tr><th>P</th><th>Project</th><th>State</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill p0">P0</span></td><td><strong>FastForward (JSM Glasgow)</strong></td><td>v1.8.0 shipped to Surge; outage in progress; GH Pages migration in flight</td><td>ff-151 (Lynsey foreground)</td></tr>
+        <tr><td><span class="pill p1">P1</span></td><td>Gallowfell (Warhammer mobile)</td><td>Active — 11 monday items, last update 15 May 09:34Z</td><td>Claude Code</td></tr>
+        <tr><td><span class="pill p2">P2</span></td><td>RTK SharePoint cleanup</td><td>Paused — runs after FF JSM signoff; 9 monday items</td><td>Claude Code (executor)</td></tr>
+        <tr><td><span class="pill p2">P2</span></td><td>ClaudeBridge infra</td><td>Active — bridge alive, 4h cadence, archive backlog cleared</td><td>Controller + .151</td></tr>
+        <tr><td><span class="pill p3">P3</span></td><td>Dropship / ML2 site / Stocks / Bedding / Rate cards / Warhammer Hollow Kin</td><td>TBD / filler workstreams</td><td>Various</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Open blockers</h2>
+    <ul class="compact">
+      <li><span class="pill bad">P0</span> Surge.sh serving 503 — JSM demo URL down. Recovery via GH Pages migration in flight on .151.</li>
+      <li><span class="pill bad">P0</span> GitHub <span class="tag">main</span> is 24h stale — none of today's 8 versions pushed. Reconciliation folded into the GH Pages migration path.</li>
+      <li><span class="pill warn">P1</span> O365 Azure App registration redirect URI still points at dead Netlify URL — needs Lynsey at her tenant admin to update.</li>
+      <li><span class="pill warn">P1</span> Dashboard job-list header overlap bug — fix queued; pattern: static header sibling above dynamic row container.</li>
+      <li><span class="pill p2">P2</span> esbuild build pipeline deferred to v1.9.0 — in-browser Babel still loading on every page hit.</li>
+      <li><span class="pill p2">P2</span> Seed data Path A (<span class="tag">?demo=1</span> watermarked) for Lynsey demos not yet wired.</li>
+      <li><span class="pill p3">P3</span> Monday FF board duplicate items from 12 May setup — dedupe pass tracked separately.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Bridge state</h2>
+  <dl class="kvp">
+    <dt>from-paul-pc → 151</dt><dd>5 directives today (12:25Z, 16:40Z, 19:10Z, 19:35Z, 19:36Z, 19:55Z); 3 processed, 3 awaiting ACK</dd>
+    <dt>from-151 → paul-pc</dt><dd>3 substantive (03:23Z archive-blocker, 17:55Z 16:40Z-ack, 18:11Z v1.8.0-shipped, 18:25Z host-automation decision-request); 0 since 19:36Z P0 outage shipped</dd>
+    <dt>Drive-root Google Docs (.151 status)</dt><dd>FF_DEPLOY_MASTER_LIST_2026-05-15.md (08:11Z) · OVERHAUL_REPORT.md (08:48Z)</dd>
+    <dt>"this folder for update"</dt><dd>4 docs + approvals/ folder with PENDING_unblock-the-stack.md (Lynsey-facing)</dd>
+    <dt>Last poll fired</dt><dd>poll-seat ran at 17:54Z (processed 12:25Z + 16:40Z + wrote ACK)</dd>
+    <dt>Memory commit cadence</dt><dd>Controller committed 13 new memory entries today; 8 mirrored to <span class="tag">G:\My Drive\ClaudeBridge\memory\controller\</span></dd>
+  </dl>
+</div>
+
+<div class="card">
+  <h2>What to watch in the next 60 min</h2>
+  <ul class="compact">
+    <li>.151 ACK on the P0 outage directive (due by 19:46Z per 10-min rule)</li>
+    <li>Surge URL — flip from 503 back to 200 (transient flap), or stay dead (forcing GH Pages migration)</li>
+    <li>GH Pages URL — last-modified should flip from <span class="tag">Thu, 14 May 2026 12:33:29 GMT</span> to today as .151 pushes v1.8.0 to main</li>
+    <li>GitHub repo — commits land, tags push, dev branch created, branch protection enabled</li>
+    <li>Hard ETA for recovery: <strong>22:00Z 2026-05-15</strong></li>
   </ul>
 </div>
 
-<script>
-mermaid.initialize({ startOnLoad: true, securityLevel: "strict", flowchart: { htmlLabels: true } });
-
-const PROJECTS = [
-  { rank:'P0', title:'FastForward', owner:'ff-151', state:'GUI polish in flight; Git migration queued; revenue lever.', role:'Specs, design, review via ClaudeBridge.', cls:'p0', suffix:' — ff-151' },
-  { rank:'P1', title:'Gallowfell', owner:'Claude Code (4h heartbeat)', state:'Live. Godot 4 source under Projects\\Gaming app.', role:'Planning, content design, asset review. No direct git pushes.', cls:'p1', suffix:' — Gonzo8285/MobileGame' },
-  { rank:'P2', title:'R.T. Keedwell SharePoint', owner:'PPC', state:'In-flight. 16 sites provisioned, brand palettes locked, nav pending.', role:'Owner — quality over speed.', cls:'p2', suffix:'' },
-  { rank:'P3', title:'Dropship', owner:'PPC', state:'Chip-away cadence. Scope TBD.', role:'Owner.', cls:'p3', suffix:'' },
-  { rank:'P4', title:'ML2 Consulting', owner:'PPC', state:'Website exists. Review pass = tighten what\'s there.', role:'Owner.', cls:'p4', suffix:'' },
-  { rank:'?', title:'Side surfaces', owner:'—', state:'Nestwell, Hollow Kin, Rate cards, Bedding import.', role:'Awaiting Paul\'s classification.', cls:'p5', suffix:'' }
-];
-
-function renderProjects() {
-  const tbody = document.getElementById('projects-body');
-  tbody.innerHTML = PROJECTS.map(p => `
-    <tr>
-      <td><span class="pill ${p.cls}">${p.rank}</span></td>
-      <td><strong>${p.title}</strong> <span class="muted">${p.suffix}</span></td>
-      <td>${p.owner}</td>
-      <td>${p.state}</td>
-      <td>${p.role}</td>
-    </tr>`).join('');
-}
-
-function fmtDate(iso) {
-  if (!iso) return '—';
-  try {
-    return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-  } catch (e) { return iso; }
-}
-function relativeTime(iso) {
-  if (!iso) return '';
-  const t = new Date(iso).getTime();
-  const diff = (t - Date.now()) / 1000;
-  const abs = Math.abs(diff);
-  const future = diff > 0;
-  let s;
-  if (abs < 60) s = Math.round(abs) + 's';
-  else if (abs < 3600) s = Math.round(abs/60) + 'm';
-  else if (abs < 86400) s = Math.round(abs/3600) + 'h';
-  else s = Math.round(abs/86400) + 'd';
-  return future ? ('in ' + s) : (s + ' ago');
-}
-
-function renderTasks(tasks) {
-  const enabled = tasks.filter(t => t.enabled);
-  const disabled = tasks.filter(t => !t.enabled);
-  enabled.sort((a,b) => {
-    const an = a.nextRunAt ? new Date(a.nextRunAt).getTime() : Infinity;
-    const bn = b.nextRunAt ? new Date(b.nextRunAt).getTime() : Infinity;
-    return an - bn;
-  });
-  disabled.sort((a,b) => (b.lastRunAt||'').localeCompare(a.lastRunAt||''));
-  const rows = [...enabled, ...disabled].map(t => [
-    t.enabled ? '<span class="pill ok">on</span>' : '<span class="pill p5">off</span>',
-    t.taskId,
-    t.description || '',
-    t.schedule || '',
-    t.nextRunAt ? (fmtDate(t.nextRunAt) + ' (' + relativeTime(t.nextRunAt) + ')') : '—',
-    t.lastRunAt ? (fmtDate(t.lastRunAt) + ' (' + relativeTime(t.lastRunAt) + ')') : '—'
-  ]);
-  const el = document.getElementById('tasks-table');
-  el.innerHTML = '';
-  new gridjs.Grid({
-    columns: [
-      { name: 'State', formatter: (cell) => gridjs.html(cell), width: '70px' },
-      { name: 'Task ID', width: '200px' },
-      { name: 'Description' },
-      { name: 'Schedule', width: '180px' },
-      { name: 'Next run', width: '180px' },
-      { name: 'Last run', width: '180px' }
-    ],
-    data: rows, sort: true, search: true
-  }).render(el);
-}
-
-async function loadState() {
-  document.getElementById('lastrefresh').textContent = 'Loading…';
-  try {
-    const r = await fetch('state.json?t=' + Date.now());
-    if (!r.ok) throw new Error('state.json HTTP ' + r.status);
-    const s = await r.json();
-    document.getElementById('lastrefresh').textContent = 'State generated: ' + fmtDate(s.generatedAt) + ' (' + relativeTime(s.generatedAt) + ') — page loaded: ' + new Date().toLocaleString('en-GB');
-    // Staleness banner
-    const ageMin = (Date.now() - new Date(s.generatedAt).getTime()) / 60000;
-    const banner = document.getElementById('stale-banner');
-    if (ageMin > 60) {
-      banner.style.display = 'block';
-      banner.textContent = 'State file is ' + Math.round(ageMin) + ' minutes old — dashboard-publish task may have stalled.';
-    } else {
-      banner.style.display = 'none';
-    }
-    renderTasks(s.tasks || []);
-    if (s.bridge) {
-      document.getElementById('inbox-from151').innerHTML = '<span class="pill ' + (s.bridge.from151Count > 0 ? 'warn':'ok') + '">' + s.bridge.from151Count + ' unprocessed</span>';
-      document.getElementById('outbox-paulpc').innerHTML = s.bridge.fromPaulPcCount + ' message' + (s.bridge.fromPaulPcCount === 1 ? '' : 's') + ' awaiting 151';
-      document.getElementById('archive-depth').innerHTML = s.bridge.archiveCount + ' archived';
-      document.getElementById('last-poll').textContent = s.bridge.lastPollAt ? (fmtDate(s.bridge.lastPollAt) + ' (' + relativeTime(s.bridge.lastPollAt) + ')') : '—';
-      document.getElementById('next-poll').textContent = s.bridge.nextPollAt ? (fmtDate(s.bridge.nextPollAt) + ' (' + relativeTime(s.bridge.nextPollAt) + ')') : '—';
-    }
-  } catch (e) {
-    document.getElementById('lastrefresh').innerHTML = '<span class="staletag">Could not load state.json — ' + e.message + '</span>';
-  }
-}
-
-renderProjects();
-loadState();
-</script>
+<div class="card" style="background:#f9fafb;">
+  <h3>Auto-refresh + sources</h3>
+  <p class="legend">This dashboard is statically generated by Controller at state-change moments. Cadence anchors: 00/04/08/12/16/20 UK. Source repo: <a href="https://github.com/gonzo8285/ppc-dashboard">github.com/gonzo8285/ppc-dashboard</a> · monday.com FF board: <a href="https://ml2-portfolio.monday.com/boards/5096344272">01_FastForward</a>.</p>
+</div>
 
 </body>
 </html>
